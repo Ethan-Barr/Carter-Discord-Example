@@ -1,44 +1,37 @@
-from discord.ext import commands
-import discord
-import json
 import os
-import KeepAlive
+import json
+import nextcord
+from nextcord.ext import commands
 
-with open('config.json', 'r') as f:
-    config = json.load(f)
-token = config['token']
-
-intents = discord.Intents.default()
-intents.message_content = True
-intents.members = True
-client = commands.Bot(command_prefix=commands.when_mentioned_or(">>"), intents=intents)
+import config
 
 
-@client.event
-async def on_ready():
-    print("Bot is ready")
+def main():
+    intents = nextcord.Intents.default()
+    intents.message_content = True
+
+    activity = nextcord.Activity(
+        type=nextcord.ActivityType.listening, name=f"{config.prefix}help"
+    )
+
+    bot = commands.Bot(
+        commands.when_mentioned_or(config.prefix),
+        intents=intents,
+        activity=activity,
+    )
+
+    # Get the modules of all cogs whose directory structure is ./cogs/<module_name>
+    for folder in os.listdir("cogs"):
+        bot.load_extension(f"cogs.{folder}")
+
+    @bot.listen()
+    async def on_ready():
+        assert bot.user is not None
+        print(f"{bot.user.name} has connected to Discord!")
+
+    # Run Discord bot
+    bot.run(config.token)
 
 
-@client.command()
-async def ping(ctx):
-    await ctx.send(f"Pong! Latency: {round(client.latency * 1000)}ms")
-
-
-@client.command(aliases=['c', 'purge', 'p'])
-@commands.has_permissions(manage_messages=True)
-async def clear(ctx, amount=3):
-    await ctx.channel.purge(limit=amount)
-
-
-@client.command()
-@commands.has_permissions(ban_members=True)
-async def ban(ctx, member: discord.Member, *, reason="No Reason Provided"):
-    await ctx.send(member.name + " has been from banned the server for " + reason)
-    await member.ban(reason=reason)
-
-
-print(f"Token: {token}")
-client.run(token)
-
-# Need to edit the KeepAlive to make the page say when the bot is online
-KeepAlive.KeepAlive()
+if __name__ == "__main__":
+    main()
