@@ -33,6 +33,23 @@ class Moderation(commands.Cog):
     def cog_unload(self):
         self.log_file.close()
 
+    
+
+    # Mute command
+    @commands.command()
+    @commands.has_permissions(manage_roles=True)
+    async def mute(self, ctx, member: nextcord.Member, *, reason=None):
+        """Mutes the specified member in the server."""
+        mute_role = nextcord.utils.get(ctx.guild.roles, name="Muted")
+
+        if not mute_role:
+            # Create the mute role if it doesn't exist
+            mute_role = await ctx.guild.create_role(name="Muted")
+            for channel in ctx.guild.channels:
+                await channel.set_permissions(mute_role, send_messages=False)
+
+        await member.add_roles(mute_role, reason=reason)
+        await ctx.send(f'{member.mention} has been muted.')
 
 
 
