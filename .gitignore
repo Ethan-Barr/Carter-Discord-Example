@@ -1,3 +1,5 @@
 
 *.env
 *.json
+moderation.log
+draft.py
