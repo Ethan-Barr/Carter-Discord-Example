@@ -4,7 +4,6 @@ from nextcord.ext import commands
 class Moderation(commands.Cog):
     def __init__(self, client):
         self.client = client
-        self.log_file = open('moderation.log', 'a')
 
 
     # Kick user
@@ -30,12 +29,27 @@ class Moderation(commands.Cog):
         """Bans the specified member from the server."""
         await member.ban(reason=reason)
         await ctx.send(f'{member.mention} has been banned.')
-    def cog_unload(self):
-        self.log_file.close()
 
     
 
-    # Mute command
+    # Unban User
+    @commands.command()
+    @commands.has_permissions(ban_members=True)
+    async def unban(ctx, *, member):
+        banned_users = await ctx.guild.bans()
+        member_name, member_discriminator = member.split("#")
+
+        for ban_entry in banned_users:
+            user = ban_entry.user
+
+            if (user.name, user.discriminator) == (member_name, member_discriminator):
+                await ctx.guild.unban(user)
+                await ctx.send(f'Unbanned {user.name}#{user.discriminator}')
+
+
+
+
+    # Mute User
     @commands.command()
     @commands.has_permissions(manage_roles=True)
     async def mute(self, ctx, member: nextcord.Member, *, reason=None):
@@ -51,7 +65,7 @@ class Moderation(commands.Cog):
         await member.add_roles(mute_role, reason=reason)
         await ctx.send(f'{member.mention} has been muted.')
 
-    #Unmute command
+    #Unmute User
     @commands.command()
     async def unmute(self, ctx, member: nextcord.Member):
         """Unmutes a muted member."""
