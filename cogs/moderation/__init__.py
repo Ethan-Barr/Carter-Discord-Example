@@ -51,6 +51,16 @@ class Moderation(commands.Cog):
         await member.add_roles(mute_role, reason=reason)
         await ctx.send(f'{member.mention} has been muted.')
 
+    #Unmute command
+    @commands.command()
+    async def unmute(self, ctx, member: nextcord.Member):
+        """Unmutes a muted member."""
+        role = nextcord.utils.get(ctx.guild.roles, name="Muted")
+        if role not in member.roles:
+            await ctx.send(f"{member.mention} is not muted.")
+            return
+        await member.remove_roles(role)
+        await ctx.send(f"{member.mention} has been unmuted.")
 
 
 def setup(client):
