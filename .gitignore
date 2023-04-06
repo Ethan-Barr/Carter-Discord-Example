@@ -2,6 +2,5 @@
 *.env
 *.json
 moderation.log
-draft.py
 KeepAlive.py
 *.pyc
