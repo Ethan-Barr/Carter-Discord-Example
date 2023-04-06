@@ -1,7 +1,11 @@
-import os
-import sys
+from contextlib import contextmanager
+import requests
+import logging
 import json
 import time
+import sys
+import os
+
 import nextcord
 from nextcord.ext import commands
 
@@ -10,7 +14,10 @@ from watchdog.events import FileSystemEventHandler
 
 import config
 
+logging.basicConfig(filename="watchdog.log", level=logging.INFO)
 
+
+# The Actual main file for Jarvis
 def main():
     intents = nextcord.Intents.default()
     intents.message_content = True
@@ -35,27 +42,59 @@ def main():
         assert bot.user is not None
         print(f"{bot.user.name} has connected to Discord!")
 
+    bot.command()
+    async def default(ctx, *, message):
+        response = requests.post("https://api.carterlabs.ai/chat", headers={
+            "Content-Type": "application/json"
+        }, data=json.dumps({
+            "text": message,
+            "key": config.carterKey,
+            "playerId": str(ctx.author.id)
+        }))
+
+        response_data = response.json()
+        await ctx.send(response_data["response"])    
+
     # Run Discord bot
     bot.run(config.token)
 
 
-class FileModifiedHandler(FileSystemEventHandler):
-    def on_modified(self, event):
-        print(f"Detected modification in {event.src_path}. Restarting bot...")
-        time.sleep(1)
-        os.execv(sys.executable, ['python'] + sys.argv)
 
-
-if __name__ == "__main__":
-    event_handler = FileModifiedHandler()
+@contextmanager
+def observe_file_changes(log_file_path):
+    event_handler = FileModifiedHandler(log_file_path)
     observer = Observer()
     observer.schedule(event_handler, ".", recursive=True)
     observer.start()
 
     try:
-        main()
+        yield
         while True:
             time.sleep(1)
+            if event_handler.is_log_file_modified():
+                logging.info(f"Detected modification in log file {log_file_path}. Ignoring...")
     except KeyboardInterrupt:
         observer.stop()
     observer.join()
+
+
+# Restarting Bot on code update
+class FileModifiedHandler(FileSystemEventHandler):
+    def __init__(self, log_file_path):
+        super().__init__()
+        self.log_file_path = log_file_path
+        self.log_file_modified_at = os.stat(log_file_path).st_mtime
+
+    def on_modified(self, event):
+        if event.src_path == self.log_file_path:
+            # If the log file was modified, update the last modified time
+            self.log_file_modified_at = os.stat(self.log_file_path).st_mtime
+            logging.info(f"Detected modification in log file {event.src_path}. Ignoring...")
+        else:
+            logging.info(f"Detected modification in {event.src_path}. Restarting bot...")
+            time.sleep(1)
+            os.execv(sys.executable, ['python'] + sys.argv)
+
+if __name__ == "__main__":
+    with observe_file_changes("log.txt"):
+        main()

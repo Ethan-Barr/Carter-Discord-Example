@@ -7,3 +7,4 @@ with open('config.json', 'r') as f:
 
 token = config['token']
 prefix = config['prefix']
+carterKey = config['carterKey']
