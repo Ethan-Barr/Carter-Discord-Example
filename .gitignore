@@ -5,3 +5,7 @@ moderation.log
 KeepAlive.py
 *.pyc
 *.pyc
+*.log
+log.txt
+*.pyc
+*.pyc
