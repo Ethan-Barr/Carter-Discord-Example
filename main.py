@@ -46,15 +46,18 @@ def main():
     async def on_command_error(ctx, error):
         if isinstance(error, commands.CommandNotFound):
             response = requests.post("https://api.carterlabs.ai/chat", headers={
-                "Content-Type": "application/json"
-            }, data=json.dumps({
-                "text": {ctx.message.content},
+                "content-Type": "application/json"
+            },data=json.dumps({
+                "text": ctx.message.content,
                 "key": config.carterKey,
                 "playerId": str(ctx.author.id)
             }))
+            output_text = response.json()["output"]["text"]
+            await ctx.send(output_text)
+            print("Used Carter")
+        else:
+            raise error
 
-            print(response.json())
-            await ctx.sent(response.json())   
 
     # Run Discord bot
     bot.run(config.token)
