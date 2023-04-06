@@ -4,3 +4,4 @@
 moderation.log
 draft.py
 KeepAlive.py
+*.pyc
