@@ -63,7 +63,7 @@ def main():
     bot.run(config.token)
 
 
-
+# ReRunning script after file update
 @contextmanager
 def observe_file_changes(log_file_path):
     event_handler = FileModifiedHandler(log_file_path)
