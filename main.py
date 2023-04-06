@@ -37,23 +37,24 @@ def main():
     for folder in os.listdir("cogs"):
         bot.load_extension(f"cogs.{folder}")
 
-    @bot.listen()
+    @bot.listen() # Start up
     async def on_ready():
         assert bot.user is not None
         print(f"{bot.user.name} has connected to Discord!")
 
-    bot.command()
-    async def default(ctx, *, message):
-        response = requests.post("https://api.carterlabs.ai/chat", headers={
-            "Content-Type": "application/json"
-        }, data=json.dumps({
-            "text": message,
-            "key": config.carterKey,
-            "playerId": str(ctx.author.id)
-        }))
+    @bot.event
+    async def on_command_error(ctx, error):
+        if isinstance(error, commands.CommandNotFound):
+            response = requests.post("https://api.carterlabs.ai/chat", headers={
+                "Content-Type": "application/json"
+            }, data=json.dumps({
+                "text": {ctx.message.content},
+                "key": config.carterKey,
+                "playerId": str(ctx.author.id)
+            }))
 
-        response_data = response.json()
-        await ctx.send(response_data["response"])    
+            print(response.json())
+            await ctx.sent(response.json())   
 
     # Run Discord bot
     bot.run(config.token)
