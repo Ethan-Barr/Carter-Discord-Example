@@ -7,23 +7,31 @@ class Help(commands.Cog):
 
     @commands.command()
     async def help(self, ctx):
-        # Create an embed
-        embed = nextcord.Embed(title="Command Help", description="Here's a list of all the available commands:", color=0x00ff00)
+        embed = nextcord.Embed(
+            title='Help',
+            description='List of available commands',
+            color=nextcord.Color.blue()
+        )
 
-        # Add fields for each command and its description
+        cog_names = []
         for cog in self.bot.cogs:
-            # Only show commands for the "Moderation" cog if the user has the "Moderator" role
-            if cog == "Moderation" and not nextcord.utils.get(ctx.author.roles, name="The TVA"):
-                continue
+            cog_names.append(cog)
 
-            # Add a title for each subject of commands
-            embed.add_field(name=f"**{cog} Commands**", value="\u200b", inline=False)
+        for cog_name in cog_names:
+            cog = self.bot.get_cog(cog_name)
+            if cog:
+                command_list = cog.get_commands()
+                if command_list:
+                    command_str = ''
+                    for command in command_list:
+                        command_str += f'**{command.name}**: {command.help}\n'
+                    embed.add_field(
+                        name=cog_name,
+                        value=command_str,
+                        inline=False
+                    )
 
-            for command in self.bot.get_cog(cog).get_commands():
-                if not command.hidden:
-                    # Add each command and its description
-                    embed.add_field(name=f"{command.name}", value=command.help, inline=False)
-
+        embed.set_footer(text=f"Use {self.bot.command_prefix}help command_name for more info on a command")
         await ctx.send(embed=embed)
 
 def setup(bot):
