@@ -5,14 +5,14 @@ class Moderation(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    # Kick user
+
+    #Kick user
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member: nextcord.Member, *, reason=None):
         """Kick a member from the server"""
         try:
             await member.kick(reason=reason)
-            await ctx.send(f"{member} has been kicked from the server.")
         except nextcord.errors.Forbidden:
             embed = nextcord.Embed(
                 title="Missing Permissions",
@@ -20,6 +20,26 @@ class Moderation(commands.Cog):
                 color=nextcord.Color.red()
             )
             await ctx.send(embed=embed)
+        except nextcord.errors.HTTPException:
+            embed = nextcord.Embed(
+                title="Failed to kick member",
+                description="An error occurred while trying to kick the member. Please try again later.",
+                color=nextcord.Color.red()
+            )
+            await ctx.send(embed=embed)
+        else:
+            muted_role = nextcord.utils.get(ctx.guild.roles, name="Muted")
+            if muted_role in member.roles:
+                await member.remove_roles(muted_role)
+                await ctx.send(f"{member.mention} was also unmuted.")
+
+            embed = nextcord.Embed(
+                title="Kicked user",
+                description=f"{member.mention} has been kicked for reason: {reason}",
+                color=nextcord.Color.dark_green()
+            )
+            await ctx.send(embed=embed)
+
 
     # Purge messages
     @commands.command()
@@ -28,7 +48,12 @@ class Moderation(commands.Cog):
         """Clears a specified amount of messages from the chat."""
         try:
             await ctx.channel.purge(limit=amount + 1)
-            await ctx.send(f"{amount} messages have been cleared.")
+            embed = nextcord.Embed(
+                title="Cleared messages",
+                description=f"You have cleared {amount} messages",
+                color=nextcord.Color.dark_green()
+            )
+            await ctx.send(embed=embed)
         except nextcord.errors.Forbidden:
             embed = nextcord.Embed(
                 title="Missing Permissions",
@@ -44,7 +69,12 @@ class Moderation(commands.Cog):
         """Bans the specified member from the server."""
         try:
             await member.ban(reason=reason)
-            await ctx.send(f'{member.mention} has been banned.')
+            embed = nextcord.Embed(
+                title="Banned User",
+                description=f"{member.mention} has been banned for reason: {reason}",
+                color=nextcord.Color.dark_green()
+            )
+            await ctx.send(embed=embed)
         except nextcord.errors.Forbidden:
             embed = nextcord.Embed(
                 title="Missing Permissions",
@@ -52,21 +82,26 @@ class Moderation(commands.Cog):
                 color=nextcord.Color.red()
             )
             await ctx.send(embed=embed)
-
+    
     # Unban User
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def unban(ctx, *, member):
+    async def unban(self, ctx, *, member):
         banned_users = await ctx.guild.bans()
         member_name, member_discriminator = member.split("#")
-
+    
         for ban_entry in banned_users:
             user = ban_entry.user
-
+    
             if (user.name, user.discriminator) == (member_name, member_discriminator):
                 try:
                     await ctx.guild.unban(user)
-                    await ctx.send(f'Unbanned {user.name}#{user.discriminator}')
+                    embed = nextcord.Embed(
+                        title="Unbanned User",
+                        description=f"{user.mention} has been unbanned.",
+                        color=nextcord.Color.dark_green()
+                    )
+                    await ctx.send(embed=embed)
                 except nextcord.errors.Forbidden:
                     embed = nextcord.Embed(
                         title="Missing Permissions",
@@ -74,6 +109,14 @@ class Moderation(commands.Cog):
                         color=nextcord.Color.red()
                     )
                     await ctx.send(embed=embed)
+                return
+        embed = nextcord.Embed(
+            title="Invalid User",
+            description="The user could not be found in the ban list.",
+            color=nextcord.Color.red()
+        )
+        await ctx.send(embed=embed)
+    
 
 
 
