@@ -1,11 +1,8 @@
-
+# File Types
 *.env
+*.pyc
 *.json
-moderation.log
-KeepAlive.py
-*.pyc
-*.pyc
-*.log
-log.txt
-*.pyc
-*.pyc
+
+# Folders
+Utils
+.idea
