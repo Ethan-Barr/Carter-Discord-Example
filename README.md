@@ -18,6 +18,7 @@ To run Jarvis on your own server, you will need to set up a few things first.
 {
   "token": "ADD DISCORD BOT TOKEN",
   "prefix": "ADD YOUR DISCORD BOT PREFIX/WAKEWORD",
+  "name": "ADD YOUR DISCORD BOT NAME FOR CARTERLABS API", 
   "carterKey": "ADD CARTERLABS API KEY"
 }
 ```
