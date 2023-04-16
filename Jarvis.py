@@ -6,7 +6,7 @@ import os
 import nextcord
 from nextcord.ext import commands
 
-from Utils.secret import prefix, token, carterAPI
+from Utils.secret import prefix, token, carterAPI, name
 from Utils.Carter import CarterSend
 
 
@@ -18,13 +18,13 @@ activity = nextcord.Activity(
 )
 
 bot = commands.Bot(
-    commands.when_mentioned_or(prefix),
     intents=intents,
     activity=activity,
     help_command=None
 )
 
 # Get the modules of all cogs whose directory structure is ./cogs/<module_name>
+
 for folder in os.listdir("cogs"):
     bot.load_extension(f"cogs.{folder}")
 
@@ -32,33 +32,28 @@ for folder in os.listdir("cogs"):
 @bot.listen() # Start up
 async def on_ready():
     assert bot.user is not None
-    print(f"{bot.user.name} has connected to Discord!")
-
+    print(f"{bot.user.name} has connected to Discord!    \n")
 
 @bot.event
-async def on_command_error(message, error):
-    if isinstance(error, commands.CommandNotFound):
-        if message.author == bot.user:
-            return
+async def on_message(message):
+    user = message.author
+    sentence = str(message.content)
+    sentence = sentence.lower()
 
-        user = message.author
-        sentence = str(message.content)
-        sentence = sentence.lower()
-
-        if prefix in sentence:
-            CarterSend(sentence, user.id)
-            with open('CarterResponse.txt') as f:
-                ResponseOutput = f.read()
-
-            print(message.content)
-            await message.channel.send(f"{ResponseOutput}")
-            print(ResponseOutput)
-            os.remove("CarterResponse.txt")
-
-        else: 
-            pass
+    if name in sentence:
+        CarterSend(sentence, user.id)
+        with open('CarterResponse.txt') as f:
+            ResponseOutput = f.read()
+    
+        print(message.content)
+        await message.channel.send(f"{ResponseOutput}")
+        print(ResponseOutput)
+        os.remove("CarterResponse.txt")
+    
     else:
-        raise error
+        pass
+
+
 
 # Run Discord bot
 bot.run(token)

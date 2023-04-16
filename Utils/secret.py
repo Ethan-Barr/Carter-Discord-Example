@@ -6,6 +6,7 @@ with open(r'Utils/config.json','r') as f:
 
 token = config['token']
 prefix = config['prefix']
+name = config['name']
 carterAPI = config['carterKey']
 
 print(token, prefix, carterAPI)
