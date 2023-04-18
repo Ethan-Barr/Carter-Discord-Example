@@ -36,11 +36,14 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
+    UIName = str(bot.user.name)
+    WakeWord = UIName[1:]
+    
     user = message.author
-    sentence = str(message.content)
+    sentence = message.content
     sentence = sentence.lower()
 
-    if name in sentence:
+    if WakeWord in sentence:
         CarterSend(sentence, user.id)
         with open('CarterResponse.txt') as f:
             ResponseOutput = f.read()
