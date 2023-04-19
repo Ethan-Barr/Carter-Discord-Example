@@ -29,9 +29,21 @@ To run Jarvis on your own server, you will need to set up a few things first.
 
 Jarvis currently supports the following commands:
 
-- `!hello`: Jarvis will greet you.
-- `!ping`: Jarvis will respond with "Pong!" and latency.
-- `!clear <number of messages>`: Jarvis will delete the specified number of messages in the current channel.
+- `>>hello`: Jarvis will greet you.
+- `>>ping`: Jarvis will respond with "Pong!" and latency.
+
+MODERATION:
+- `>>clear <number of messages>`: Jarvis will delete the specified number of messages in the current channel. (Only if member has the `manage messages` role)
+- `>>ban <user> <reason> `: Jarvis will ban that user from the server. (Only if member has the `ban users` role)
+- `>>clear <number of messages>`: Jarvis will delete the specified number of messages in the current channel. (Only if member has the `manage messages` role)
+- `>>ban <user> <reason>`: Jarvis will ban that user from the server. (Only if member has the `ban users` role)
+- `>>unban <user>`: Jarvis will remove the ban on the specified user from the server. (Only if member has the `ban users` role)
+- `>>kick <user> <reason>`: Jarvis will kick the specified user from the server. (Only if member has the `kick members` role)
+- `>>mute <user> <duration> <reason>`: Jarvis will mute the specified user for the given duration and reason. (Only if member has the `manage messages` role)
+- `>>unmute <user>`: Jarvis will remove the mute on the specified user. (Only if member has the `manage messages` role)
+
+Please make sure to adjust the role names according to your specific server's settings.
+
 
 ## Contributing
 
