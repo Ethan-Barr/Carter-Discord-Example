@@ -1,3 +1,4 @@
+from termcolor import colored
 import requests
 import time
 import json
@@ -6,54 +7,55 @@ import os
 import nextcord
 from nextcord.ext import commands
 
-from Utils.secret import prefix, token, carterAPI, name
-from Utils.Carter import CarterSend
+
+with open('config.json', 'r') as f:
+    data = json.load(f)
 
 
 intents = nextcord.Intents.default()
-
 intents.message_content = True
+
 activity = nextcord.Activity(
-    type=nextcord.ActivityType.listening, name=f"{prefix} help"
+    type=nextcord.ActivityType.listening, name=f"?help"
 )
 
-bot = commands.Bot(
+client = commands.Bot(
     intents=intents,
     activity=activity,
-    help_command=None
+    command_prefix='?'  # set the command prefix here
 )
 
-# Get the modules of all cogs whose directory structure is ./cogs/<module_name>
 
+# Load all cogs in the "cogs" directory
 for folder in os.listdir("cogs"):
-    bot.load_extension(f"cogs.{folder}")
+    if folder.endswith(".py"):
+        client.load_extension(f"cogs.{folder[:-3]}")
+        print('loaded')
 
 
-@bot.listen() # Start up
+@client.listen() # Start up
 async def on_ready():
-    assert bot.user is not None
-    print(f"{bot.user.name} has connected to Discord!    \n")
+    print(f"{client.user.name} has connected to Discord!    \n")
 
-@bot.event
+@client.event
 async def on_message(message):
-    user = message.author
-    sentence = str(message.content)
-    sentence = sentence.lower()
+    if 'jarvis' in message.content.lower():
+        response = requests.post("https://api.carterlabs.ai/chat", headers={
+            "Content-Type": "application/json"
+        }, data=json.dumps({
+            "text": message.content,
+            "key": data["carterKey"],
+            "playerId": message.author.id
+        }))
+        response_data = response.json()['output']['text']
+        print(response_data)
+        await message.channel.send(response_data)
 
-    if name in sentence:
-        CarterSend(sentence, user.id)
-        with open('CarterResponse.txt') as f:
-            ResponseOutput = f.read()
-    
-        print(message.content)
-        await message.channel.send(f"{ResponseOutput}")
-        print(ResponseOutput)
-        os.remove("CarterResponse.txt")
-    
-    else:
         pass
 
+    @client.command()
+    async def yest(ctx):
+        await ctx.send("Hello, world!")
 
-
-# Run Discord bot
-bot.run(token)
+# Run the bot
+client.run(data["token"])
