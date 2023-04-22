@@ -1,10 +1,10 @@
-# Jarvis Discord Bot
+# Carter Discord Bot Example
 
-Jarvis is a Discord bot built using Python and the nextcord library. Jarvis is designed to preform a varirity of tasks but mainly to help with your programming querys. Outputs will consit of API responses from CarterLabs or from built in functions
+This is a Discord bot built using Python and the nextcord library. It is designed to preform a varirity of tasks but mainly to help with your programming querys. Outputs will consit of API responses from CarterLabs or from built in functions. 
 
 ## Getting Started
 
-To run Jarvis on your own server, you will need to set up a few things first.
+To run your bot on your own server, you will need to set up a few things first.
 
 1. Clone or download the repository to your local machine.
 2. Navigate to the directory where the repository was cloned or downloaded.
@@ -23,26 +23,26 @@ To run Jarvis on your own server, you will need to set up a few things first.
 }
 ```
 
-8. Start running the bot `python Jarvis.py` in your terminal.
+8. Start running the bot `python Bot.py` in your terminal.
 
 ## Commands
 
-Jarvis currently supports the following commands:
+The bot currently supports the following commands (Work in progress):
 
 - `>>hello`: Jarvis will greet you.
 - `>>ping`: Jarvis will respond with "Pong!" and latency.
 
 MODERATION:
-- `>>clear <number of messages>`: Jarvis will delete the specified number of messages in the current channel. (Only if member has the `manage messages` role)
-- `>>ban <user> <reason> `: Jarvis will ban that user from the server. (Only if member has the `ban users` role)
-- `>>clear <number of messages>`: Jarvis will delete the specified number of messages in the current channel. (Only if member has the `manage messages` role)
-- `>>ban <user> <reason>`: Jarvis will ban that user from the server. (Only if member has the `ban users` role)
-- `>>unban <user>`: Jarvis will remove the ban on the specified user from the server. (Only if member has the `ban users` role)
-- `>>kick <user> <reason>`: Jarvis will kick the specified user from the server. (Only if member has the `kick members` role)
-- `>>mute <user> <duration> <reason>`: Jarvis will mute the specified user for the given duration and reason. (Only if member has the `manage messages` role)
-- `>>unmute <user>`: Jarvis will remove the mute on the specified user. (Only if member has the `manage messages` role)
+- `>>clear <number of messages>`: The bot will delete the specified number of messages in the current channel. (Only if member has the `manage messages` role)
+- `>>ban <user> <reason> `: The bot will ban that user from the server. (Only if member has the `ban users` role)
+- `>>clear <number of messages>`: The bot will delete the specified number of messages in the current channel. (Only if member has the `manage messages` role)
+- `>>ban <user> <reason>`: The bot will ban that user from the server. (Only if member has the `ban users` role)
+- `>>unban <user>`: The bot will remove the ban on the specified user from the server. (Only if member has the `ban users` role)
+- `>>kick <user> <reason>`: The bot will kick the specified user from the server. (Only if member has the `kick members` role)
+- `>>mute <user> <duration> <reason>`: The bot will mute the specified user for the given duration and reason. (Only if member has the `manage messages` role)
+- `>>unmute <user>`: The bot will remove the mute on the specified user. (Only if member has the `manage messages` role)
 
-Please make sure to adjust the role names according to your specific server's settings.
+Please make sure to adjust the role permitions according to your specific server's settings.
 
 
 ## Contributing
