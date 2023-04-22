@@ -16,7 +16,7 @@ intents = nextcord.Intents.default()
 intents.message_content = True
 
 activity = nextcord.Activity(
-    type=nextcord.ActivityType.listening, name=f"?help"
+    type=nextcord.ActivityType.listening, name=f">>help"
 )
 
 client = commands.Bot(
