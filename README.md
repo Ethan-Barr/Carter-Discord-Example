@@ -14,9 +14,11 @@ To run your bot on your own server, you will need to set up a few things first.
 6. Create a new project on the [CarterLabs](https://controller.carterlabs.ai/welcome) dashboard and name your character. Follow the prompts on the dashboard and then create a new API key and copy it.
 7. Open the config.py file and fill in or change the necessary details, as detailed below:
 
+'''
 DiscordAPI = "ENTER YOUR DISCORD BOT TOKEN HERE."
 UIName = "ENTER THE NAME OF YOUR BOT HERE."
 Prefix = "ENTER YOUR PREFERRED PREFIX FOR AUTOMATION COMMANDS HERE."
+'''
 
 8. Start running the bot `python Bot.py` in your terminal.
 
