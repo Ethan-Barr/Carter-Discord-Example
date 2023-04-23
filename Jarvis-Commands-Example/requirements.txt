@@ -1,3 +1,0 @@
-nextcord
-watchdog
-requests
