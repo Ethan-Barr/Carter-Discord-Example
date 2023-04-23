@@ -1,8 +1,0 @@
-# File Types
-*.env
-*.pyc
-*.json
-
-# Folders
-Old
-.idea
