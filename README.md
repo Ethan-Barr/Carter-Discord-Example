@@ -1,6 +1,6 @@
 # Carter Discord Bot Example
 
-This is a Discord bot built using Python and the nextcord library. It is designed to preform a variety of tasks but mainly to help with your programming queries. Outputs will consist of API responses from CarterLabs or from built in functions.
+This is a Discord bot built using Python and the nextcord library. It is designed to preform a variety of tasks but mainly to help with your programming queries. Outputs will consist of API responses from CarterLabs or from built in functions. This branch has removed Carter functionality, as I created it while slightly drunk again. This functionality can easily be re-inserted, potentially using this repository's contents: https://github.com/SoapDoesCode/Carter-Discord-Boilerplate - the code layout for this branch is based on the same code layout as that linked repository.
 
 ## Getting Started
 
@@ -12,14 +12,7 @@ To run your bot on your own server, you will need to set up a few things first.
 4. Create a new application on the [Discord Developer Portal](https://discord.com/developers/applications).
 5. Create a new bot for your application and copy the bot token.
 6. Create a new project on the [CarterLabs](https://controller.carterlabs.ai/welcome) dashboard and name your character. Follow the prompts on the dashboard and then create a new API key and copy it.
-7. Open the config.py file and fill in or change the necessary details, as detailed below:
-
-'''
-DiscordAPI = "ENTER YOUR DISCORD BOT TOKEN HERE."
-UIName = "ENTER THE NAME OF YOUR BOT HERE."
-Prefix = "ENTER YOUR PREFERRED PREFIX FOR AUTOMATION COMMANDS HERE."
-'''
-
+7. Open the config.py file and fill in or change the necessary details. Including the API keys.
 8. Start running the bot `python Bot.py` in your terminal.
 
 ## Commands
