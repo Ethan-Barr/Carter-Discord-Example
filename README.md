@@ -1,7 +1,5 @@
 # Carter Discord Bot Example
 
-This is a Discord bot built using Python and the nextcord library. It is designed to preform a variety of tasks but mainly to help with your programming queries. Outputs will consist of API responses from CarterLabs or from built in functions. This branch has removed Carter functionality, as I created it while slightly drunk again. This functionality can easily be re-inserted, potentially using this repository's contents: https://github.com/SoapDoesCode/Carter-Discord-Boilerplate - the code layout for this branch is based on the same code layout as that linked repository.
-
 ## Getting Started
 
 To run your bot on your own server, you will need to set up a few things first.
@@ -17,8 +15,6 @@ To run your bot on your own server, you will need to set up a few things first.
 
 ## Commands
 
-The bot currently supports the following commands (Work in progress):
-
 - `>>hello`: Jarvis will greet you.
 - `>>ping`: Jarvis will respond with "Pong!" and latency.
 
@@ -31,8 +27,6 @@ MODERATION:
 - `>>kick <user> <reason>`: The bot will kick the specified user from the server. (Only if member has the `kick members` role)
 - `>>mute <user> <duration> <reason>`: The bot will mute the specified user for the given duration and reason. (Only if member has the `manage messages` role)
 - `>>unmute <user>`: The bot will remove the mute on the specified user. (Only if member has the `manage messages` role)
-
-Please make sure to adjust the role permissions according to your specific server's settings.
 
 
 ## Contributing
