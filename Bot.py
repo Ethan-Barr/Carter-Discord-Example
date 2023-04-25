@@ -1,6 +1,7 @@
 import nextcord
 from nextcord.ext import commands
 from config import *
+from carter import *
 
 intents = nextcord.Intents.all()
 client = commands.Bot(command_prefix=Prefix, intents=intents)
@@ -97,7 +98,16 @@ async def on_message(message: nextcord.Message):
                 ResponseOutput = (f"{messageamount} messages deleted. I was authorised to do so by {User}.")
                 await channel.send(ResponseOutput)
 
-#    elif WakeWord in sentence: # Use this code if you want to add some form of chatbot interface.
+    elif WakeWord in sentence: # Use this code if you want to add some form of chatbot interface.
+            SendToCarter(sentence, User, APIkey)
+            with open('ResponseOutput.txt') as f:
+                ResponseOutput = f.read()
+
+            print(message.content)
+            await message.channel.send(f"{ResponseOutput}")
+            print(ResponseOutput)
+            os.remove("ResponseOutput.txt")
+
     else:
         pass
 

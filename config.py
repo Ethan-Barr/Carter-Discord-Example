@@ -1,3 +1,4 @@
 DiscordAPI = "ENTER YOUR DISCORD BOT TOKEN HERE."
+APIkey = "ENTER YOUR CARTER AGENT'S TOKEN HERE"
 UIName = "Jarvis"
 Prefix = ">>"
