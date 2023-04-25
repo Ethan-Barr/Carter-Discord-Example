@@ -1,5 +1,8 @@
 import nextcord
 from nextcord.ext import commands
+
+import os
+
 from config import *
 from carter import *
 
