@@ -1,3 +1,2 @@
 nextcord
-watchdog
 requests
