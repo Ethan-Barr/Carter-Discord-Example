@@ -8,6 +8,7 @@ DiscordAPI = data['token']
 APIkey = data['carterKey']
 UIName = data['name']
 Prefix = data['prefix']
+ModLog = data['modLog']
 
 
 # print(DiscordAPI, APIkey, UIName, Prefix)
