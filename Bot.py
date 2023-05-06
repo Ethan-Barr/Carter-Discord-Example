@@ -16,54 +16,19 @@ async def on_ready():
     print(f"{UIName} | Operational")
 
 
-# Bot prefix commands - Cogs will eventually be added
-
-
-# Handles Ban command - Member need Ban permission on there role
-@client.command()
-async def ban(ctx, member: nextcord.Member, *, reason=None):
-    await member.ban(reason=reason)
-    await ctx.send(f'{member} has been banned.')
-
-# Handles Kick command - Member need Kick members permission on there role
-
-
-@client.command()
-async def kick(ctx, member: nextcord.Member, *, reason=None):
-    await member.kick(reason=reason)
-    await ctx.send(f'{member} has been kicked.')
-
-# Handles mute command - Member need manage roles permission on there role
-
-
-@client.command()
-async def mute(ctx, member: nextcord.Member):
-    role = nextcord.utils.get(ctx.guild.roles, name="Muted")
-    await member.add_roles(role)
-    await ctx.send(f'{member} has been muted.')
-
-# Handles unmute command - Member need manage roles permission on there role
-
-
-@client.command()
-async def unmute(ctx, member: nextcord.Member):
-    role = nextcord.utils.get(ctx.guild.roles, name="Muted")
-    await member.remove_roles(role)
-    await ctx.send(f'{member} has been unmuted.')
-
-# handle on_message event
-
-
 @client.event
 async def on_message(message: nextcord.Message):
     if message.author == client.user:
         return
 
-    # Remove these 2 lines if you dont want this function - to mute a discord bot
+    # Remove these 2 lines if you dont want this function - This function will mute a user/bot on discord by changing the userID in ""
+    if message.author.id == 1087420744809582692:
+        return
 
     sentence = message.content.lower()
     User = message.author
     WakeWord = UIName[1:]
+
 
     if Prefix in sentence:
         sentence = sentence.replace(Prefix, "")
@@ -124,21 +89,19 @@ async def on_message(message: nextcord.Message):
                     f"{messageamount} messages deleted. I was authorised to do so by {User} in channel {channel}")
                 await channel.send(ResponseOutput)
 
-        # CarterAPI if commands is not found
-        # Use this code if you want to add some form of chatbot interface.
-        elif WakeWord in sentence:
-            SendToCarter(sentence, User, APIkey)
-            with open('ResponseOutput.txt') as f:
-                ResponseOutput = f.read()
-            print(message.content)
-
-            # await message.channel.trigger_typing()
-
-            await message.channel.send(f"{ResponseOutput}")
-            print(ResponseOutput)
-            os.remove("ResponseOutput.txt")
-        else:
-            pass
+    # CarterAPI if commands is not found
+    # Use this code if you want to add some form of chatbot interface.
+    elif WakeWord in sentence:
+        await message.channel.trigger_typing()
+        SendToCarter(sentence, User, APIkey)
+        with open('ResponseOutput.txt') as f:
+            ResponseOutput = f.read()
+        await message.channel.send(f"{ResponseOutput}")
+        # print(message.content)
+        # print(ResponseOutput)
+        os.remove("ResponseOutput.txt")
+    else:
+        pass
 
 # run bot
 client.run(DiscordAPI)
