@@ -39,7 +39,7 @@ async def on_message(message: nextcord.Message):
                 try:
                     member = message.mentions[0]
                     await member.ban()
-                    await message.channel.send(f'{member} has been banned.')
+                    await message.ModLog.send(f'{member} has been banned.')
                 except:
                     await message.channel.send('Please mention a valid member.')
 
@@ -49,9 +49,10 @@ async def on_message(message: nextcord.Message):
                 try:
                     member = message.mentions[0]
                     await member.kick()
-                    await message.channel.send(f'{member} has been kicked.')
+                    await message.ModLog.send(f'{member} has been kicked.')
                 except:
                     await message.channel.send('Please mention a valid member.')
+
 
         # Handles unmute command - Member need manage roles permission on there role
         elif "unmute" in sentence:
@@ -61,10 +62,9 @@ async def on_message(message: nextcord.Message):
                     role = nextcord.utils.get(
                         message.guild.roles, name="Muted")
                     await member.remove_roles(role)
-                    await message.channel.send(f'{member} has been unmuted.')
+                    await message.ModLog.send(f'{member} has been unmuted.')
                 except:
                     await message.channel.send('Please mention a valid member.')
-
 
         # Handles mute command - Member need manage roles permission on there role
         elif "mute" in sentence:
@@ -74,7 +74,7 @@ async def on_message(message: nextcord.Message):
                     role = nextcord.utils.get(
                         message.guild.roles, name="Muted")
                     await member.add_roles(role)
-                    await message.channel.send(f'{member} has been muted.')
+                    await message.ModLog.send(f'{member} has been muted.')
                 except:
                     await message.channel.send('Please mention a valid member.')
 
@@ -88,17 +88,21 @@ async def on_message(message: nextcord.Message):
                 await channel.purge(limit=messageamount)
                 ResponseOutput = (
                     f"{messageamount} messages deleted. I was authorised to do so by {User} in channel {channel}")
-                await channel.send(ResponseOutput)
+                await ModLog.send(ResponseOutput)
+
 
     # CarterAPI if commands is not found
     # Use this code if you want to add some form of chatbot interface.
     elif WakeWord in sentence:
+        user = message.author
+        users = str(user).lower()
+
         await message.channel.trigger_typing()
-        SendToCarter(sentence, User, APIkey)
+        SendToCarter(sentence, users, APIkey)
         with open('ResponseOutput.txt') as f:
             ResponseOutput = f.read()
         await message.channel.send(f"{ResponseOutput}")
-        # print(message.content)
+        print(f"{users} | {ResponseOutput}")
         # print(ResponseOutput)
         os.remove("ResponseOutput.txt")
     else:
