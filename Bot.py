@@ -53,18 +53,6 @@ async def on_message(message: nextcord.Message):
                 except:
                     await message.channel.send('Please mention a valid member.')
 
-        # Handles mute command - Member need manage roles permission on there role
-        elif "mute" in sentence:
-            if message.author.guild_permissions.manage_roles:
-                try:
-                    member = message.mentions[0]
-                    role = nextcord.utils.get(
-                        message.guild.roles, name="Muted")
-                    await member.add_roles(role)
-                    await message.channel.send(f'{member} has been muted.')
-                except:
-                    await message.channel.send('Please mention a valid member.')
-
         # Handles unmute command - Member need manage roles permission on there role
         elif "unmute" in sentence:
             if message.author.guild_permissions.manage_roles:
@@ -74,6 +62,19 @@ async def on_message(message: nextcord.Message):
                         message.guild.roles, name="Muted")
                     await member.remove_roles(role)
                     await message.channel.send(f'{member} has been unmuted.')
+                except:
+                    await message.channel.send('Please mention a valid member.')
+
+
+        # Handles mute command - Member need manage roles permission on there role
+        elif "mute" in sentence:
+            if message.author.guild_permissions.manage_roles:
+                try:
+                    member = message.mentions[0]
+                    role = nextcord.utils.get(
+                        message.guild.roles, name="Muted")
+                    await member.add_roles(role)
+                    await message.channel.send(f'{member} has been muted.')
                 except:
                     await message.channel.send('Please mention a valid member.')
 
