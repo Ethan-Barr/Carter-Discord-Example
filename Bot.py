@@ -6,8 +6,10 @@ import os
 from config import *
 from carter import *
 
+
 intents = nextcord.Intents.all()
-client = commands.Bot(command_prefix=Prefix, intents=intents)
+activity = nextcord.Activity(type=nextcord.ActivityType.watching, name="Iron Man movies") # Change this to anything you want
+client = commands.Bot(command_prefix=Prefix, intents=intents, activity=activity)
 
 
 # On startup
