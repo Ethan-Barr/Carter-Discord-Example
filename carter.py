@@ -20,6 +20,10 @@ def SendToCarter(sentence, User, APIkey):
     FullResponse = Response["text"]
     ResponseOutput = FullResponse
 
+    ResponseOutput = ResponseOutput.replace("Unknown person", User)
+    ResponseOutput = ResponseOutput.replace("Unknown Person", User)
+    ResponseOutput = ResponseOutput.replace("unknown person", User)
+
     f = open("ResponseOutput.txt", "w+")
     f.write(f"{ResponseOutput}")
     f.close()
