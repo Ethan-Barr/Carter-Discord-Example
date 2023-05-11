@@ -23,14 +23,9 @@ async def on_message(message: nextcord.Message):
     if message.author == client.user:
         return
 
-    # Remove these 2 lines if you dont want this function - This function will mute a user/bot on discord by changing the userID in ""
-    if message.author.id == 1087420744809582692:
-        return
-
+    User = str(message.author)
     sentence = message.content.lower()
-    User = message.author
     WakeWord = UIName[1:]
-
 
     if Prefix in sentence:
         sentence = sentence.replace(Prefix, "")
@@ -100,7 +95,7 @@ async def on_message(message: nextcord.Message):
         users = str(user.id)
 
         await message.channel.trigger_typing()
-        SendToCarter(sentence, users, APIkey)
+        SendToCarter(sentence, User, APIkey)
         with open('ResponseOutput.txt') as f:
             ResponseOutput = f.read()
         await message.channel.send(f"{ResponseOutput}")
