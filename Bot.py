@@ -97,7 +97,7 @@ async def on_message(message: nextcord.Message):
     # Use this code if you want to add some form of chatbot interface.
     elif WakeWord in sentence:
         user = message.author
-        users = str(user).lower()
+        users = str(user.id)
 
         await message.channel.trigger_typing()
         SendToCarter(sentence, users, APIkey)
