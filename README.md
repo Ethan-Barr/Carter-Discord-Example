@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-Download the bot code from a repository to your computer.
+Download the bot code from the repository to your computer.
 You can do this by "cloning" the repository (a copy of the code) to your local machine, or by downloading a ZIP file of the code.
 
 Install the required Python packages by running a command in your terminal.
