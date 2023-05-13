@@ -24,6 +24,10 @@ async def on_message(message: nextcord.Message):
         return
 
     User = str(message.author)
+
+    if User in IgnoredNames:
+        return
+
     sentence = message.content.lower()
     WakeWord = UIName[1:]
 
