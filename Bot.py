@@ -22,9 +22,9 @@ async def on_ready():
 async def on_message(message: nextcord.Message):
     if message.author == client.user:
         return
-    
+
     # Remove these 2 lines if you dont want this function - This function will mute a user/bot on discord by changing the userID
-    if message.author.id == 1087420744809582692:
+    if message.author.bot:
         return
 
     User = str(message.author)
