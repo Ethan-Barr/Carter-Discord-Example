@@ -1,5 +1,3 @@
-e = 2
-
 import nextcord
 from nextcord.ext import commands
 
