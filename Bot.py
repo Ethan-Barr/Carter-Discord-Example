@@ -1,10 +1,9 @@
 import nextcord
 from nextcord.ext import commands
 
-import os
+import requests
 
 from config import *
-from carter import *
 
 
 intents = nextcord.Intents.all()
@@ -103,13 +102,23 @@ async def on_message(message: nextcord.Message):
         users = str(user.id)
 
         await message.channel.trigger_typing()
-        SendToCarter(sentence, User, APIkey)
-        with open('ResponseOutput.txt') as f:
-            ResponseOutput = f.read()
+        response = requests.post("https://api.carterlabs.ai/chat", headers={
+            "Content-Type": "application/json"
+        }, data=json.dumps({
+            "text": f"{sentence}",
+            "key": f"{APIkey}",
+            "playerId": f"{User}"
+        }))
+    
+        RawResponse = response.json()
+        Response = RawResponse["output"]
+        FullResponse = Response["text"]
+        ResponseOutput = FullResponse
+
+        ResponseOutput = ResponseOutput.replace("Unknown person", User)
+
         await message.channel.send(f"{ResponseOutput}")
-        print(f"{users} | {ResponseOutput}")
-        # print(ResponseOutput)
-        os.remove("ResponseOutput.txt")
+        print(f"{user} | {ResponseOutput}")
     else:
         pass
 
