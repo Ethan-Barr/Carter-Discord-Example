@@ -1,15 +1,25 @@
-import nextcord
 from nextcord.ext import commands
+import nextcord
 
 import requests
+import dotenv
+import json
+import os
 
-from config import *
+dotenv.load_dotenv()
+
+prefix = os.getenv("BOT_PREFIX")
+token = os.getenv("DISCORD_TOKEN")
+CarterAPI = os.getenv("CARTER_TOKEN")
+
+UIName = "Jarvis" # You can change this to anything you want
 
 
 intents = nextcord.Intents.all()
-activity = nextcord.Activity(type=nextcord.ActivityType.watching, name="Iron Man movies") # Change this to anything you want
-client = commands.Bot(command_prefix=Prefix, intents=intents, activity=activity)
+activity = nextcord.Activity(type=nextcord.ActivityType.watching, name="Iron Man movies") # Change this to anything you want to display on your bots Activity
+client = commands.Bot(command_prefix=prefix, intents=intents, activity=activity)
 
+client.remove_command("help")
 
 # On startup
 @client.event
@@ -18,112 +28,38 @@ async def on_ready():
 
 
 @client.event
-async def on_message(message: nextcord.Message):
-    if message.author == client.user:
-        return
+async def on_message(message):
+        channel = message.channel
 
-    if message.author.bot:
-        return
+        if message.author != client.user and not message.content.startswith(prefix) and UIName.lower() in message.content.lower():
+            try: 
+                async with channel.typing():
+                    response = requests.post(
+                        "https://api.carterlabs.ai/chat",
+                        headers={
+                            "Content-Type": "application/json"
+                        },
+                        data=json.dumps({
+                            "text": message.content,
+                            "key": CarterAPI,
+                            "playerId": message.author.id
+                        })
+                    )
 
-    # Remove these 2 lines if you dont want this function - This function will mute a user/bot on discord by changing the userID
-    if message.author  == "1087420744809582692":
-        return
+                    response_data = response.json()
+                    response_text = response_data['output']['text']
 
-    User = str(message.author)
+                    await message.reply(response_text, mention_author=False)
 
-    if User in IgnoredNames:
-        return
+            except Exception as err:
+                await channel.send(f"There was an Error: {err}")
 
-    sentence = message.content.lower()
-    WakeWord = UIName[1:]
-
-    if Prefix in sentence:
-        sentence = sentence.replace(Prefix, "")
-
-        # Handles Ban command - Member need Ban permission on there role
-        if "ban" in sentence:
-            if message.author.guild_permissions.ban_members:
-                try:
-                    member = message.mentions[0]
-                    await member.ban()
-                    await message.ModLog.send(f'{member} has been banned.')
-                except:
-                    await message.channel.send('Please mention a valid member.')
-
-        # Handles Kick command - Member need Kick members permission on there role
-        elif "kick" in sentence:
-            if message.author.guild_permissions.kick_members:
-                try:
-                    member = message.mentions[0]
-                    await member.kick()
-                    await message.ModLog.send(f'{member} has been kicked.')
-                except:
-                    await message.channel.send('Please mention a valid member.')
+        await client.process_commands(message)
 
 
-        # Handles unmute command - Member need manage roles permission on there role
-        elif "unmute" in sentence:
-            if message.author.guild_permissions.manage_roles:
-                try:
-                    member = message.mentions[0]
-                    role = nextcord.utils.get(
-                        message.guild.roles, name="Muted")
-                    await member.remove_roles(role)
-                    await message.ModLog.send(f'{member} has been unmuted.')
-                except:
-                    await message.channel.send('Please mention a valid member.')
-
-        # Handles mute command - Member need manage roles permission on there role
-        elif "mute" in sentence:
-            if message.author.guild_permissions.manage_roles:
-                try:
-                    member = message.mentions[0]
-                    role = nextcord.utils.get(
-                        message.guild.roles, name="Muted")
-                    await member.add_roles(role)
-                    await message.ModLog.send(f'{member} has been muted.')
-                except:
-                    await message.channel.send('Please mention a valid member.')
-
-        # Handles clear command - Member need manage messages permission on there role
-        elif "clear" in sentence:
-            if message.author.guild_permissions.manage_messages:
-                amount = sentence.replace("clear ", "")
-                messageamount = int(amount)
-                channel = message.channel
-                messages = []
-                await channel.purge(limit=messageamount)
-                ResponseOutput = (
-                    f"{messageamount} messages deleted. I was authorised to do so by {User} in channel {channel}")
-                await ModLog.send(ResponseOutput)
+@client.command()
+async def ping(ctx):
+    await ctx.send(f"Pong! {round(client.latency, 1)}ms") 
 
 
-    # CarterAPI if commands is not found
-    # Use this code if you want to add some form of chatbot interface.
-    elif WakeWord in sentence:
-        user = message.author
-        users = str(user.id)
-
-        await message.channel.trigger_typing()
-        response = requests.post("https://api.carterlabs.ai/chat", headers={
-            "Content-Type": "application/json"
-        }, data=json.dumps({
-            "text": f"{sentence}",
-            "key": f"{APIkey}",
-            "playerId": f"{User}"
-        }))
-    
-        RawResponse = response.json()
-        Response = RawResponse["output"]
-        FullResponse = Response["text"]
-        ResponseOutput = FullResponse
-
-        ResponseOutput = ResponseOutput.replace("Unknown person", User)
-
-        await message.channel.send(f"{ResponseOutput}")
-        print(f"{user} | {ResponseOutput}")
-    else:
-        pass
-
-# run bot
-client.run(DiscordAPI)
+client.run(token)
