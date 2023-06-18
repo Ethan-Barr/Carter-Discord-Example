@@ -1,4 +1,6 @@
 
 *.pyc
 tokens.json
-ResponseOutput.txt
+.env
+
+Old/
