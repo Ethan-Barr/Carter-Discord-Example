@@ -31,8 +31,8 @@ async def on_ready():
 async def on_message(message):
         channel = message.channel
 
-        if message.author != client.user and not message.content.startswith(prefix) and UIName.lower() in message.content.lower():
-            try: 
+        if message.author != client.user and not message.content.startswith(prefix) and "Jarvis" in message.content:
+            try:
                 async with channel.typing():
                     response = requests.post(
                         "https://api.carterlabs.ai/chat",
