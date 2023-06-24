@@ -42,13 +42,12 @@ async def on_message(message):
                     data=json.dumps({
                         "text": message.content,
                         "key": CarterAPI,
-                        "playerId": message.author.id
+                        "user_id": message.author.id
                     })
                 )
 
                 response_data = response.json()
                 response_text = response_data['output']['text']
-
                 await message.reply(response_text, mention_author=False)
 
         except Exception as err:
