@@ -37,25 +37,23 @@ class Moderation(commands.Cog):
         """Mute a member for set time"""
         if interaction.user.guild_permissions.manage_roles:
             try:
-                # Replace "Muted" with the actual role name for muting
                 role = nextcord.utils.get(interaction.guild.roles, name="Muted")
                 await member.add_roles(role)
-                await interaction.response.send_message(f'{member} has been muted.')
+                await interaction.response.send_message(f'{member} has been unmuted.')
             except:
                 await interaction.response.send_message('Please mention a valid member.')
         else:
             await interaction.response.send_message("You don't have the permission to use this command.")
-    
+
     # Unmute command
     @nextcord.slash_command()
     async def unmute(self, interaction: nextcord.Interaction, member: nextcord.Member):
         """Unmute a member that has been muted"""
         if interaction.user.guild_permissions.manage_roles:
             try:
-                # Replace "Muted" with the actual role name for muting
                 role = nextcord.utils.get(interaction.guild.roles, name="Muted")
                 await member.remove_roles(role)
-                await interaction.response.send_message(f'{member} has been unmuted.')
+                await interaction.response.send_message(f'{member} has been muted.')
             except:
                 await interaction.response.send_message('Please mention a valid member.')
         else:
