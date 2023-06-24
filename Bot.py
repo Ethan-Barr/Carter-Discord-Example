@@ -28,6 +28,21 @@ async def on_ready():
     print(f"{UIName} | Operational")
 
 
+@client.command()
+async def load(ctx, extension):
+    client.load_extension(f'cogs.{extension}')
+    await ctx.send(f'`cogs.{extension}` was loaded.')
+
+@client.command()
+async def unload(ctx, extension):
+    client.unload_extension(f'cogs.{extension}')
+    await ctx.send(f'`cogs.{extension}` was unloaded. You can no longer use it until it is reloaded.')
+
+for filename in os.listdir('./cogs'):
+    if filename.endswith('.py'):
+        client.load_extension(f'cogs.{filename[:-3]}')
+
+
 @client.event
 async def on_message(message):
     channel = message.channel
@@ -54,17 +69,6 @@ async def on_message(message):
             await channel.send(f"There was an Error: {err}")
 
     await client.process_commands(message)
-
-
-@client.command()
-async def ping(ctx):
-    await ctx.send(f"Pong! {round(client.latency, 1)}ms")
-
-
-@client.slash_command()
-async def ping(interaction: nextcord.Interaction):
-    """Simple command that responds with Pong!"""
-    await interaction.response.send_message(f"Pong! {round(client.latency, 1)}ms")
 
 
 @client.slash_command(
