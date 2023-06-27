@@ -45,6 +45,9 @@ for filename in os.listdir('./cogs'):
 
 @client.event
 async def on_message(message):
+    if message.author == client.user:
+        return
+
     channel = message.channel
     if message.author != client.user and not message.content.lower().startswith(prefix) and "jarvis" in message.content.lower():
         try:
@@ -71,11 +74,9 @@ async def on_message(message):
     await client.process_commands(message)
 
 
-@client.slash_command(
-    name="github",
-    description="Displays the link to the Nextcord source code"
-)
+@client.slash_command()
 async def github(ctx: nextcord.Interaction):
+    """Displays the link to the Nextcord source code"""
     embed = nextcord.Embed(
         title="Github Repo",
         description="""Here is the github repo with the source code as a template!:
