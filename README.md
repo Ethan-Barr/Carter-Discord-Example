@@ -20,6 +20,11 @@
 2. Click on the "Add Bot" button.
 3. Confirm the action by clicking "Yes, do it!" when prompted.
 4. Under the "Token" section, click on the "Copy" button to copy your bot token. Keep this token secure, as it provides access to your bot.
+5. Turn on the following sliders to allow our bot to be operational:
+- PRESENCE INTENT
+- SERVER MEMBERS INTENT
+- MESSAGE CONTENT INTENT
+- PUBLIC BOT - That is optional
 
 ### **Step 3: Invite Your Bot to a Server**
 1. In the Developer Portal, go to the "OAuth2" tab on the left sidebar.
@@ -35,15 +40,22 @@ DISCORD_TOKEN = ENTER TOKEN
 BOT_PREFIX = CREATE A PREFIX
 CARTER_TOKEN = ENTER CARTERAPI KEY
 ```
-2. in `bot.py` you can customise the name of your bot in `line 15`, edit the discord activity of your bot in `line 19` and in `line 34` change it your discord bot name all in lowercase
-3. Open your terminal
-4. Run `python bot.py` to be able to run your bot
+2. Install Dependencies: Open your terminal and navigate to the directory containing the source code files. Run the following command to install the required dependencies:
+```
+pip install -r requirements.txt
+```
+3. In `bot.py` you can customise the following:
+- Name of discord Bot >> `line 15`
+- Discord activity presence >>`line 20`
+- Name of discord bot in all lowercase >> `line 52`
+4. Open your terminal
+5. Run `python bot.py` to be able to run your bot
 
 
 ## __Contributing__
 If you find a bug or would like to suggest a new feature, please open an issue on the GitHub repository. Pull requests & Forks are also welcome.
 
-Thanks to [@TheKronis](https://github.com/TheKronis) for the base template & [@Cipher58](https://github.com/Cipher58) as well for some devlopment
+Thanks to [@TheKronis](https://github.com/TheKronis) for the base template that I have expanded on & [@Cipher58](https://github.com/Cipher58) as well for some devlopment
 
 ## __Documentation__
 - Carter's Documentation: <https://docs.carterlabs.ai/>
