@@ -41,6 +41,20 @@ for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
 
+def SendMessage(message, CarterAPI):
+    response = requests.post(
+                    "https://api.carterlabs.ai/api/chat",
+                    headers={
+                        "Content-Type": "application/json"
+                    },
+                    data=json.dumps({
+                        "text": message.content,
+                        "key": CarterAPI,
+                        "user_id": message.author.id
+                    })
+                )
+    return response
+
 
 @client.event
 async def on_message(message):
@@ -51,45 +65,24 @@ async def on_message(message):
     if message.author != client.user and not message.content.lower().startswith(prefix) and "jarvis" in message.content.lower():
         try:
             async with channel.typing():
-                response = requests.post(
-                    "https://api.carterlabs.ai/api/chat",
-                    headers={
-                        "Content-Type": "application/json"
-                    },
-                    data=json.dumps({
-                        "text": message.content,
-                        "key": CarterAPI,
-                        "user_id": message.author.id
-                    })
-                )
-
-                response_data = response.json()
-                response_text = response_data['output']['text']
-                await message.reply(response_text, mention_author=False)
+                ResponseOutput = SendMessage(message, CarterAPI)
+                await message.reply(ResponseOutput)
 
         except Exception as err:
             await channel.send(f"There was an Error: {err}")
-
+    
+    elif message.reference:
+        replied_to = await message.channel.fetch_message(message.reference.message_id)
+        if replied_to.author == client.user:
+            ResponseOutput = SendMessage(message, CarterAPI)
+            await message.reply(ResponseOutput)
 
     # Only temporary!
     if isinstance(channel, nextcord.DMChannel) and message.author != client.user and not message.content.startswith(prefix):
         try:
             async with channel.typing():
-                response = requests.post(
-                    "https://api.carterlabs.ai/api/chat",
-                    headers={
-                        "Content-Type": "application/json"
-                    },
-                    data=json.dumps({
-                        "text": message.content,
-                        "key": CarterAPI,
-                        "user_id": message.author.id
-                    })
-                )
-
-                response_data = response.json()
-                response_text = response_data['output']['text']
-                await message.reply(response_text, mention_author=False)
+                ResponseOutput = SendMessage(message, CarterAPI)
+                await message.reply(ResponseOutput)
 
         except Exception as err:
             await channel.send(f"There was an Error: {err}")
