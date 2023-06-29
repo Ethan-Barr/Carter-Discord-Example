@@ -80,8 +80,9 @@ async def on_message(message):
     elif message.reference:
         replied_to = await message.channel.fetch_message(message.reference.message_id)
         if replied_to.author == client.user:
-            ResponseOutput = SendMessage(message, CarterAPI)
-            await message.reply(ResponseOutput)
+            async with channel.typing():
+                ResponseOutput = SendMessage(message, CarterAPI)
+                await message.reply(ResponseOutput)
 
     # Only temporary!
     if isinstance(channel, nextcord.DMChannel) and message.author != client.user and not message.content.startswith(prefix):
