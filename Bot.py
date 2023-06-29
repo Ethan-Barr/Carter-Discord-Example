@@ -53,7 +53,7 @@ def SendMessage(message, CarterAPI):
                         "user_id": message.author.id
                     })
                 )
-    return response
+    return response.text
 
 
 @client.event
