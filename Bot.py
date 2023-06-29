@@ -53,7 +53,13 @@ def SendMessage(message, CarterAPI):
                         "user_id": message.author.id
                     })
                 )
-    return response.text
+    
+    RawResponse = response.json()
+    Response = RawResponse["output"]
+    FullResponse = Response["text"]
+    ResponseOutput = FullResponse
+
+    return ResponseOutput
 
 
 @client.event
