@@ -14,7 +14,6 @@ CarterAPI = os.getenv("CARTER_TOKEN")
 
 UIName = "Jarvis"  # You can change this to anything you want
 
-
 intents = nextcord.Intents.all()
 # Change this to anything you want to display on your bots Activity
 activity = nextcord.Activity(type=nextcord.ActivityType.watching, name="Iron Man movies")
@@ -50,6 +49,30 @@ async def on_message(message):
 
     channel = message.channel
     if message.author != client.user and not message.content.lower().startswith(prefix) and "jarvis" in message.content.lower():
+        try:
+            async with channel.typing():
+                response = requests.post(
+                    "https://api.carterlabs.ai/api/chat",
+                    headers={
+                        "Content-Type": "application/json"
+                    },
+                    data=json.dumps({
+                        "text": message.content,
+                        "key": CarterAPI,
+                        "user_id": message.author.id
+                    })
+                )
+
+                response_data = response.json()
+                response_text = response_data['output']['text']
+                await message.reply(response_text, mention_author=False)
+
+        except Exception as err:
+            await channel.send(f"There was an Error: {err}")
+
+
+    # Only temporary!
+    if isinstance(channel, nextcord.DMChannel) and message.author != client.user and not message.content.startswith(prefix):
         try:
             async with channel.typing():
                 response = requests.post(
