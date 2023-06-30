@@ -4,8 +4,8 @@ import os
 import requests
 import random
 
-import discord
-from discord.ext import commands
+import nextcord
+from nextcord.ext import commands
 
 class _8Ball(commands.Cog):
     def __init__(self, client):
