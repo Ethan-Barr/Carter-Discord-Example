@@ -1,11 +1,15 @@
 from nextcord.ext import commands
 import nextcord
 
+from carterpy import Carter
+
 import requests
 import dotenv
 import json
 import os
 
+
+# Setup
 dotenv.load_dotenv()
 
 prefix = os.getenv("BOT_PREFIX")
@@ -14,6 +18,7 @@ CarterAPI = os.getenv("CARTER_TOKEN")
 
 UIName = "Jarvis"  # You can change this to anything you want
 
+# Bot config
 intents = nextcord.Intents.all()
 # Change this to anything you want to display on your bots Activity
 activity = nextcord.Activity(type=nextcord.ActivityType.watching, name="Iron Man movies")
@@ -21,12 +26,17 @@ client = commands.Bot(command_prefix=prefix, intents=intents, activity=activity)
 
 client.remove_command("help")
 
+# Carter-py setup
+carter = Carter(CarterAPI)
+
+
 # On startup
 @client.event
 async def on_ready():
     print(f"{UIName} | Operational")
 
 
+# Cog setup
 @client.command()
 async def load(ctx, extension):
     client.load_extension(f'cogs.{extension}')
@@ -41,26 +51,6 @@ for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
 
-def SendMessage(message, CarterAPI):
-    response = requests.post(
-                    "https://api.carterlabs.ai/api/chat",
-                    headers={
-                        "Content-Type": "application/json"
-                    },
-                    data=json.dumps({
-                        "text": message.content,
-                        "key": CarterAPI,
-                        "user_id": message.author.id
-                    })
-                )
-    
-    RawResponse = response.json()
-    Response = RawResponse["output"]
-    FullResponse = Response["text"]
-    ResponseOutput = FullResponse
-
-    return ResponseOutput
-
 
 @client.event
 async def on_message(message):
@@ -71,25 +61,25 @@ async def on_message(message):
     if message.author != client.user and not message.content.lower().startswith(prefix) and "jarvis" in message.content.lower():
         try:
             async with channel.typing():
-                ResponseOutput = SendMessage(message, CarterAPI)
-                await message.reply(ResponseOutput)
+                response = carter.say(message, message.author)
+                await channel.send(response.output_text)
 
         except Exception as err:
             await channel.send(f"There was an Error: {err}")
     
-    elif message.reference:
+    if message.reference:
         replied_to = await message.channel.fetch_message(message.reference.message_id)
         if replied_to.author == client.user:
             async with channel.typing():
-                ResponseOutput = SendMessage(message, CarterAPI)
-                await message.reply(ResponseOutput)
+                response = carter.say(message, message.author)
+                await channel.send(response.output_text)
 
     # Only temporary!
     if isinstance(channel, nextcord.DMChannel) and message.author != client.user and not message.content.startswith(prefix):
         try:
             async with channel.typing():
-                ResponseOutput = SendMessage(message, CarterAPI)
-                await message.reply(ResponseOutput)
+                response = carter.say(message, message.author)
+                await channel.send(response.output_text)
 
         except Exception as err:
             await channel.send(f"There was an Error: {err}")
