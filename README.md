@@ -55,7 +55,7 @@ pip install -r requirements.txt
 ## __Contributing__
 If you find a bug or would like to suggest a new feature, please open an issue on the GitHub repository. Pull requests & Forks are also welcome.
 
-Thanks to [@TheKronis](https://github.com/TheKronis) for the base template that I have expanded on & [@Cipher58](https://github.com/Cipher58) as well for some devlopment
+Thanks to [@TheKronis](https://github.com/TheKronis) for the base template that I have expanded on & [@Cipher58](https://github.com/Cipher58) as well for some development
 
 ## __Documentation__
 - Carter's Documentation: <https://docs.carterlabs.ai/>
