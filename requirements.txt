@@ -2,3 +2,4 @@ nextcord
 requests
 python-dotenv
 carter-py
+carter-offline==2.0.5b

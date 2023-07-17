@@ -17,7 +17,7 @@ prefix = os.getenv("BOT_PREFIX")
 token = os.getenv("DISCORD_TOKEN")
 CarterAPI = os.getenv("CARTER_TOKEN")
 
-UIName = "Jarvis"  # You can change this to anything you want
+UIName = os.getenv("UIName")  # You can change this to anything you want
 
 # Bot config
 intents = nextcord.Intents.all()
@@ -60,27 +60,31 @@ async def on_message(message):
         return
 
     channel = message.channel
-    if message.author != client.user and not message.content.lower().startswith(prefix) and "jarvis" in message.content.lower():
+    sentence = str(message.content)
+    User = str(message.author)
+
+    if message.author != client.user and not sentence.lower().startswith(prefix) and UIName in sentence.lower():
         try:
             async with channel.typing():
-                response = SendToCarter(CarterAPI, message, message.author)
+                response = carter.SendToCarter(CarterAPI, sentence, User)
                 await channel.send(response)
 
         except Exception as err:
             await channel.send(f"There was an Error: {err}")
+            print(err)
 
     if message.reference:
         replied_to = await message.channel.fetch_message(message.reference.message_id)
         if replied_to.author == client.user:
             async with channel.typing():
-                response = SendToCarter(CarterAPI, message, message.author)
+                response = carter.SendToCarter(CarterAPI, sentence, User)
                 await channel.send(response)
 
     # Only temporary!
     if isinstance(channel, nextcord.DMChannel) and message.author != client.user and not message.content.startswith(prefix):
         try:
             async with channel.typing():
-                response = SendToCarter(CarterAPI, message, message.author)
+                response = carter.SendToCarter(CarterAPI, sentence, User)
                 await channel.send(response)
 
         except Exception as err:
