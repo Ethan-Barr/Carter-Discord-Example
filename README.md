@@ -63,3 +63,7 @@ Thanks to [@TheKronis](https://github.com/TheKronis) for the base template that 
 
 ## __License__
 This project is licensed under the MIT License. See the LICENSE file for more information.
+
+
+## __Other information/Notes__
+This project will be having limited edits to it from me as the owner but still feel free to create Pull Requests. I will still autorise them and monitor this.
