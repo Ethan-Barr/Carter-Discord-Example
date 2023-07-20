@@ -2,6 +2,7 @@ from nextcord.ext import commands
 import nextcord
 
 from carterpy import Carter
+from CarterOffline import *
 
 import requests
 import dotenv
@@ -16,7 +17,7 @@ prefix = os.getenv("BOT_PREFIX")
 token = os.getenv("DISCORD_TOKEN")
 CarterAPI = os.getenv("CARTER_TOKEN")
 
-UIName = "Jarvis"  # You can change this to anything you want
+UIName = os.getenv("UIName")  # You can change this to anything you want
 
 # Bot config
 intents = nextcord.Intents.all()
@@ -26,9 +27,10 @@ client = commands.Bot(command_prefix=prefix, intents=intents, activity=activity)
 
 client.remove_command("help")
 
-# Carter-py setup
-carter = Carter(CarterAPI)
+intents_file_path = "intents.json"
 
+# Carter-py setup
+carter = CarterOffline(intents_file_path, CarterAPI)
 
 # On startup
 @client.event
@@ -58,28 +60,32 @@ async def on_message(message):
         return
 
     channel = message.channel
-    if message.author != client.user and not message.content.lower().startswith(prefix) and "jarvis" in message.content.lower():
+    sentence = str(message.content)
+    User = str(message.author)
+
+    if message.author != client.user and not sentence.lower().startswith(prefix) and UIName in sentence.lower():
         try:
             async with channel.typing():
-                response = carter.say(message, message.author)
-                await channel.send(response.output_text)
+                response = carter.SendToCarter(CarterAPI, sentence, User)
+                await channel.send(response)
 
         except Exception as err:
             await channel.send(f"There was an Error: {err}")
-    
+            print(err)
+
     if message.reference:
         replied_to = await message.channel.fetch_message(message.reference.message_id)
         if replied_to.author == client.user:
             async with channel.typing():
-                response = carter.say(message, message.author)
-                await channel.send(response.output_text)
+                response = carter.SendToCarter(CarterAPI, sentence, User)
+                await channel.send(response)
 
     # Only temporary!
     if isinstance(channel, nextcord.DMChannel) and message.author != client.user and not message.content.startswith(prefix):
         try:
             async with channel.typing():
-                response = carter.say(message, message.author)
-                await channel.send(response.output_text)
+                response = carter.SendToCarter(CarterAPI, sentence, User)
+                await channel.send(response)
 
         except Exception as err:
             await channel.send(f"There was an Error: {err}")
