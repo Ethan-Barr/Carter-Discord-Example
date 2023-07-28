@@ -17,7 +17,7 @@ prefix = os.getenv("BOT_PREFIX")
 token = os.getenv("DISCORD_TOKEN")
 CarterAPI = os.getenv("CARTER_TOKEN")
 
-UIName = os.getenv("UIName")  # You can change this to anything you want
+UIName = 'jarvis'    # You can change this to anything you want
 
 # Bot config
 intents = nextcord.Intents.all()
@@ -63,9 +63,8 @@ async def on_message(message):
     sentence = str(message.content)
     User = str(message.author)
 
-    UIName = os.getenv("UIName")
 
-    if message.author != client.user and not sentence.lower().startswith(prefix) and UIName in sentence():
+    if message.author != client.user and not sentence.lower().startswith(prefix) and UIName in sentence.lower():
         try:
             async with channel.typing():
                 response = carter.SendToCarter(CarterAPI, sentence, User)
