@@ -30,6 +30,8 @@ client.remove_command("help")
 intents_file_path = "intents.json"
 
 # Carter-py setup
+
+carterpy = Carter(CarterAPI)
 carter = CarterOffline(intents_file_path, CarterAPI)
 
 # On startup
@@ -67,7 +69,10 @@ async def on_message(message):
     if message.author != client.user and not sentence.lower().startswith(prefix) and UIName in sentence.lower():
         try:
             async with channel.typing():
-                response = carter.SendToCarter(CarterAPI, sentence, User)
+                try:
+                    response = carter.SendToCarter(CarterAPI, sentence, User)
+                except:
+                    response = carterpy.say(sentence, User)
                 await message.reply(response)
 
         except Exception as err:
@@ -78,14 +83,20 @@ async def on_message(message):
         replied_to = await message.channel.fetch_message(message.reference.message_id)
         if replied_to.author == client.user:
             async with channel.typing():
-                response = carter.SendToCarter(CarterAPI, sentence, User)
+                try:
+                    response = carter.SendToCarter(CarterAPI, sentence, User)
+                except:
+                    response = carterpy.say(sentence, User)
                 await message.reply(response)
 
     # Only temporary!
     if isinstance(channel, nextcord.DMChannel) and message.author != client.user and not message.content.startswith(prefix):
         try:
             async with channel.typing():
-                response = carter.SendToCarter(CarterAPI, sentence, User)
+                try:
+                    response = carter.SendToCarter(CarterAPI, sentence, User)
+                except:
+                    response = carterpy.say(sentence, User)
                 await message.reply(response)
 
         except Exception as err:
