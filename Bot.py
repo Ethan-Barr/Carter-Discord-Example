@@ -63,7 +63,9 @@ async def on_message(message):
     sentence = str(message.content)
     User = str(message.author)
 
-    if message.author != client.user and not sentence.lower().startswith(prefix) and UIName in sentence.lower():
+    UIName = os.getenv("UIName")
+
+    if message.author != client.user and not sentence.lower().startswith(prefix) and UIName in sentence():
         try:
             async with channel.typing():
                 response = carter.SendToCarter(CarterAPI, sentence, User)
