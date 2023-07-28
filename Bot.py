@@ -73,6 +73,7 @@ async def on_message(message):
                     response = carter.SendToCarter(CarterAPI, sentence, User)
                 except:
                     response = carterpy.say(sentence, User)
+                    response = response.output_text
                 await message.reply(response)
 
         except Exception as err:
@@ -87,6 +88,7 @@ async def on_message(message):
                     response = carter.SendToCarter(CarterAPI, sentence, User)
                 except:
                     response = carterpy.say(sentence, User)
+                    response = response.output_text
                 await message.reply(response)
 
     # Only temporary!
@@ -97,6 +99,7 @@ async def on_message(message):
                     response = carter.SendToCarter(CarterAPI, sentence, User)
                 except:
                     response = carterpy.say(sentence, User)
+                    response = response.output_text
                 await message.reply(response)
 
         except Exception as err:
