@@ -69,10 +69,10 @@ async def on_message(message):
         try:
             async with channel.typing():
                 response = carter.SendToCarter(CarterAPI, sentence, User)
-                await channel.send(response)
+                await message.reply(response)
 
         except Exception as err:
-            await channel.send(f"There was an Error: {err}")
+            await message.reply(f"There was an Error: {err}")
             print(err)
 
     if message.reference:
@@ -80,17 +80,17 @@ async def on_message(message):
         if replied_to.author == client.user:
             async with channel.typing():
                 response = carter.SendToCarter(CarterAPI, sentence, User)
-                await channel.send(response)
+                await message.reply(response)
 
     # Only temporary!
     if isinstance(channel, nextcord.DMChannel) and message.author != client.user and not message.content.startswith(prefix):
         try:
             async with channel.typing():
                 response = carter.SendToCarter(CarterAPI, sentence, User)
-                await channel.send(response)
+                await message.reply(response)
 
         except Exception as err:
-            await channel.send(f"There was an Error: {err}")
+            await message.reply(f"There was an Error: {err}")
 
     await client.process_commands(message)
 
